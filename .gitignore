@@ -8,3 +8,7 @@ __pycache__/
 */results/*
 */.ipynb_checkpoints/*
 *config.py
+*.ipynb_checkpoints*
+*.aux
+*.log
+*.dvi
