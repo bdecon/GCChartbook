@@ -1,0 +1,79 @@
+% % % % % % % % % % % % % % 
+%
+%	Chartbook Example
+%
+% % % % % % % % % % % % % %
+\documentclass{report}
+
+%
+% % % % % % Packages % % % % % % % % % 
+%
+	
+
+	\usepackage{pgfplots}
+	\usetikzlibrary{pgfplots.dateplot}
+
+%
+% % % % % Document Settings % % % % % % % 
+%	
+
+	
+	% Style for date plots
+	\pgfplotsset{compat=newest, 
+		scaled y ticks=false,
+		axis line style={black!20}, 
+		xtick style={black!20}, ytick style={draw=none},
+		every tick label/.style={black!50, font=\scriptsize,
+			/pgf/number format/assume math mode=true},
+		width=10.0cm, height=6.8cm, 
+		xticklabel style={align=left}, 
+		yticklabel style={text width=0.9em, align=right},       
+		axis x line*=bottom, x axis line style={black!50},
+	    axis y line=left, y axis line style={opacity=0},
+	    ymajorgrids, grid style={very thin, black!10},	        
+	    every node near coord/.style={/pgf/number format/fixed,
+	    	font=\scriptsize, style={black!70}}}
+	    	
+	% Date (X) Axis Tick Marks, one tick per year, every even year labeled
+	\newcommand{\dateaxisticks}{
+		date coordinates in=x, axis line style={draw=none},
+		xmin={2017-01-01}, xmax={2025-04-15}, 
+		xtick={{2017-01-01}, {2018-01-01}, {2019-01-01}, {2020-01-01}, {2021-01-01}, 
+			{2022-01-01}, {2023-01-01}, {2024-01-01}, 
+		    {2025-01-01}},
+		}	    	
+	
+	\newcommand{\rbar}{
+		\fill[color=black!10] (axis cs:{2020-02-01},\pgfkeysvalueof{/pgfplots/ymin}) 
+			rectangle (axis cs:{2020-05-01}, \pgfkeysvalueof{/pgfplots/ymax});}
+			
+				
+% % % % % % % %
+%
+%  Begin Document
+%
+% % % % % % % %		
+\begin{document} 
+
+\section*{Chartbook Example}
+
+Economists are concerned with the wages of workers involved in the production of goods and services. Each month, the Bureau of Labor Statistics report the average hourly earnings of private industry workers. Over 80 percent of private industry workers are classified as \textit{production and non-supervisory workers}. This includes all workers in goods-producing sectors as well as workers in service-providing sectors who are not above the working-supervisor level. \\
+
+\input{wages.txt}
+\vspace{3mm}
+
+\noindent \textbf{Average Hourly Earnings Growth}\\
+\small \textit{Annualized 3M/3M growth rate}\\
+\textit{private production and non-supervisory workers}\\
+\begin{tikzpicture}
+	\pgfplotstableread[col sep=comma]{wages.csv}\datatable
+	\begin{axis}[date coordinates in=x, axis line style={draw=none},
+		max space between ticks=30, enlarge x limits=0.01,
+		enlarge y limits=0.1, \dateaxisticks xticklabel={\year}]
+	\rbar
+	\addplot[ybar, bar width=2.4pt, draw opacity=0, fill=blue!95!black] 
+		table [x=DATE, y=CH3M]{\datatable};
+	\end{axis}
+\end{tikzpicture}
+
+\end{document}
